@@ -87,11 +87,11 @@ graph TD;
     G --> G1[js_urls.txt];
     G --> G2[js_files/];
     G --> G3[secrets_from_js/];
-    G3 --> G3a[firebase.txt];
+    G3 --> G3a[aws-keys_secrets.txt];
     G3 --> G3b[github_secrets.txt];
     H --> H1[xss.txt];
     H --> H2[ssti.txt];
-    H --> H3[aws-keys_secrets.txt];
+    H --> H3[idor.txt];
     subgraph subdomains_wayback_port_nuclei.sh
         B
         C
@@ -110,8 +110,8 @@ graph TD;
 This diagram shows:
 
 - `subdomains_wayback_port_nuclei.sh` generates `subdomains/` (with tool-specific files), `live_subdomains.txt`, `port_scan.txt`, `live_waymore.txt`, and `nuclei.txt`.
-- `js_analyzer.sh` creates `js/` with `js_urls.txt`, `js_files/`, and `secrets_from_js/` (e.g., `firebase.txt`, `github_secrets.txt`).
-- `get_hit_points.sh` produces `hit_points/` with vulnerability files (e.g., `xss.txt`, `ssti.txt`, `aws-keys_secrets.txt`).
+- `js_analyzer.sh` creates `js/` with `js_urls.txt`, `js_files/`, and `secrets_from_js/` (e.g., `aws-keys_secrets.txt`, `github_secrets.txt`).
+- `get_hit_points.sh` produces `hit_points/` with vulnerability files (e.g., `xss.txt`, `ssti.txt`, `idor.txt`).
 
 ## Why Modular Design?
 
