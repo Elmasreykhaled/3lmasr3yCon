@@ -1,0 +1,14 @@
+# Ignore domain-specific output directories
+*/subdomains/
+*/js/
+*/hit_points/
+*.txt
+*.js
+
+# Ignore temporary files
+*.tmp
+*~
+
+# Ignore environment files
+.env
+*.env
