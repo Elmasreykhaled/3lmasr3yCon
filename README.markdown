@@ -67,7 +67,7 @@ Below is an ASCII representation of the `3lmasr3yCon` workflow, showing how scri
 
 ```mermaid
 graph TD;
-    A[Input: Domain(s)] --> B[subdomains_wayback_port_nuclei.sh];
+    A[Input_Domain(s)] --> B[subdomains_wayback_port_nuclei.sh];
     B --> C[js_analyzer.sh];
     B --> D[get_hit_points.sh];
     A --> E[check_tools.sh];
