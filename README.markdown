@@ -43,17 +43,17 @@ The framework is modular, with three core scripts (`subdomains_wayback_port_nucl
 Below is an ASCII representation of the `3lmasr3yCon` workflow, showing how scripts interact:
 
 ```
-+-------------------+       +-------------------+       +-------------------+
-| Input: Domain(s)  | ----> | subdomains_       | ----> | js_analyzer.sh    |
-| (-t or domains.txt|       | wayback_port_     |       | Extracts &        |
-|                   |       | nuclei.sh         |       | Analyzes JS Files |
-|                   |       | Enumerates Subs,  |       | for Secrets       |
-|                   |       | Ports, URLs, Vulns|       +-------------------+
-|                   |       |                   |       +-------------------+
-|                   |       | Produces:         | ----> | get_hit_points.sh |
-|                   |       | live_waymore.txt  |       | Analyzes URLs     |
-|                   |       | live_subdomains.txt      | for Vulns/Secrets |
-+-------------------+       +-------------------+       +-------------------+
++-------------------+       +-----------------------------------------+       +-------------------+
+| Input: Domain(s)  | ----> | subdomains_wayback_port_nuclei.sh       | ----> | js_analyzer.sh    |
+| (-t or domains.txt|       |                                         |       | Extracts &        |
+|                   |       |                                         |       | Analyzes JS Files |
+|                   |       | Enumerates Subs, Ports, URLs, Vulns     |       | for Secrets       |
+|                   |       |                      |                  |       +-------------------+
+|                   |       |                                         |       +-------------------+
+|                   |       | Produces:                               | ----> | get_hit_points.sh |
+|                   |       | live_waymore.txt                        |       | Analyzes URLs     |
+|                   |       | live_subdomains.txt                     |       | for Vulns/Secrets |
++-------------------+       +-----------------------------------------+       +-------------------+
            |                        |
            v                        v
 +-------------------+       +-------------------+
