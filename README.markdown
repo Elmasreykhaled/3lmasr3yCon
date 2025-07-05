@@ -3,6 +3,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ![Version: 1.0](https://img.shields.io/badge/Version-1.0-blue.svg)
+
 **3lmasr3yCon** is a powerful, modular reconnaissance framework designed for bug bounty hunters and security researchers. It streamlines subdomain enumeration, wayback URL collection, port scanning, vulnerability scanning, and pattern-based analysis to uncover vulnerabilities and exposed secrets. Built with flexibility in mind, it integrates three core scripts, each usable independently or together via a master script, to cater to diverse reconnaissance needs.
 
 ## Table of Contents
