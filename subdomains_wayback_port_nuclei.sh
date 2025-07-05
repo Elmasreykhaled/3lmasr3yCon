@@ -134,7 +134,7 @@ for domain in "${DOMAINS[@]}"; do
 
     # 8. Run waymore for wayback URLs
     echo "Fetching wayback URLs for $domain..."
-    waymore -mod U -i "$domain" -oU waymore.txt || echo "Waymore failed, skipping..."
+    waymore -mode U -i "$domain" -oU waymore.txt || echo "Waymore failed, skipping..."
 
     # 9. Run httpx for wayback URLs
     echo "Checking live wayback URLs for $domain..."
