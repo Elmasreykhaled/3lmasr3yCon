@@ -85,11 +85,11 @@ for domain in "${DOMAINS[@]}"; do
 
     # Github-subdomains (requires GitHub token)
     echo "Running github-subdomains..."
-    ~/go/bin/github-subdomains -d "$domain"  -t "your_github_token_here" -o subdomains/github-subdomains.txt || echo "Github-subdomains failed, skipping..."
+    ~/go/bin/github-subdomains -d "$domain"  -t "$GITHUB_TOKEN" -o subdomains/github-subdomains.txt || echo "Github-subdomains failed, skipping..."
 
     # Chaos (requires Chaos API key)
     echo "Running chaos..."
-    ~/go/bin/chaos -d "$domain" -key "your_key_here" -o subdomains/chaos.txt || echo "Chaos failed, skipping..."
+    ~/go/bin/chaos -d "$domain" -key "$CHAOS_KEY" -o subdomains/chaos.txt || echo "Chaos failed, skipping..."
 
     # Findomain
     echo "Running findomain..."
