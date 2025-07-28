@@ -142,7 +142,7 @@ for domain in "${DOMAINS[@]}"; do
 
     # 10. Run nuclei for vulnerability scanning
     echo "Running nuclei vulnerability scan..."
-    ~/go/bin/nuclei -l live_subdomains.txt -o nuclei.txt || echo "Nuclei failed, skipping..."
+    ~/go/bin/nuclei -silent -si 30 -l live_subdomains.txt -es info,low -etags network -o nuclei.txt || echo "Nuclei failed, skipping..."
 
     echo "Finished processing $domain"
     cd .. || exit
