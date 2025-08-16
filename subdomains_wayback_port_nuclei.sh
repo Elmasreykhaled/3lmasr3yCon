@@ -85,7 +85,7 @@ for domain in "${DOMAINS[@]}"; do
 
     # Github-subdomains (requires GitHub token)
     echo "Running github-subdomains..."
-    ~/go/bin/github-subdomains -d "$domain"  -t "$GITHUB_TOKEN" -o subdomains/github-subdomains.txt || echo "Github-subdomains failed, skipping..."
+    ~/go/bin/github-subdomains -d "$domain"  -t "$GITHUB_TOKEN" -o subdomains/github_subdomains.txt || echo "Github-subdomains failed, skipping..."
 
     # Chaos (requires Chaos API key)
     echo "Running chaos..."
@@ -110,6 +110,7 @@ for domain in "${DOMAINS[@]}"; do
         while IFS= read -r subdomain; do
             ~/go/bin/subfinder -d "$subdomain" -o subdomains/temp_subfinder_third.txt || echo "Subfinder (third-level) failed, skipping..."
             ~/go/bin/assetfinder --subs-only "$subdomain" > subdomains/temp_assetfinder_third.txt || echo "Assetfinder (third-level) failed, skipping..."
+            ~/go/bin/github-subdomains -d "$subdomain"  -t "$GITHUB_TOKEN" -o subdomains/temp_github_subdomains_third.txt || echo "Github-subdomains failed, skipping..."            
             findomain -t "$subdomain" -u subdomains/temp_findomain_third.txt || echo "Findomain (third-level) failed, skipping..."
         done < subdomains/live_all_collected_subdomains.txt
         # Combine and deduplicate third-level results
@@ -128,9 +129,36 @@ for domain in "${DOMAINS[@]}"; do
     echo "Checking live subdomains from final_collected_subdomains.txt..."
     ~/go/bin/httpx -silent -l subdomains/final_collected_subdomains.txt -silent -o live_subdomains.txt || echo "Httpx failed, skipping..."
 
-    # 7. Run naabu for port scanning
-    echo "Running port scan on live subdomains..."
-    sudo ~/go/bin/naabu -l live_subdomains.txt  -silent -o port_scan.txt || echo "Naabu failed, skipping..."
+     # 7. Run naabu for port scanning
+     echo "Running port scan on live subdomains..."
+
+    # Check if live_subdomains.txt exists and is non-empty
+    if [[ ! -s live_subdomains.txt ]]; then
+        echo "Error: live_subdomains.txt is missing or empty. Skipping port scan."
+        exit 1
+    fi
+
+    # Remove http:// and https:// from live_subdomains.txt and save to naabu.txt
+    sed 's|https\?://||g' live_subdomains.txt > naabu.txt
+
+    # Run naabu for fast port scanning
+    if ! sudo ~/go/bin/naabu -i naabu.txt -o port_scan.txt -silent -rate 1000; then
+        echo "Error: naabu port scan failed."
+        rm naabu.txt
+        exit 1
+    fi
+
+    # Clean up temporary file
+    rm naabu.txt
+
+    # Check if port_scan.txt exists and is non-empty, then extract unique ports
+    if [[ -s port_scan.txt ]]; then
+        awk -F':' '{print $2}' port_scan.txt | sort -u > summary_of_port_scanning.txt
+        echo "Port scan complete. Unique ports saved to summary_of_port_scanning.txt."
+    else
+        echo "Error: port_scan.txt is empty or missing. No ports extracted."
+        exit 1
+    fi
 
     # 8. Run waymore for wayback URLs
     echo "Fetching wayback URLs for $domain..."
@@ -142,7 +170,7 @@ for domain in "${DOMAINS[@]}"; do
 
     # 10. Run nuclei for vulnerability scanning
     echo "Running nuclei vulnerability scan..."
-    ~/go/bin/nuclei -silent -si 30 -l live_subdomains.txt -es info,low -etags network -o nuclei.txt || echo "Nuclei failed, skipping..."
+    ~/go/bin/nuclei -silent -si 30 -stats -l live_subdomains.txt -es info,low -etags network -o nuclei.txt || echo "Nuclei failed, skipping..."
 
     echo "Finished processing $domain"
     cd .. || exit
