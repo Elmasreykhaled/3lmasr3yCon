@@ -129,35 +129,32 @@ for domain in "${DOMAINS[@]}"; do
     echo "Checking live subdomains from final_collected_subdomains.txt..."
     ~/go/bin/httpx -silent -l subdomains/final_collected_subdomains.txt -silent -o live_subdomains.txt || echo "Httpx failed, skipping..."
 
-     # 7. Run naabu for port scanning
-     echo "Running port scan on live subdomains..."
+    # 7. Run naabu for port scanning
+    echo "Running port scan on live subdomains..."
 
     # Check if live_subdomains.txt exists and is non-empty
     if [[ ! -s live_subdomains.txt ]]; then
         echo "Error: live_subdomains.txt is missing or empty. Skipping port scan."
-        exit 1
-    fi
-
-    # Remove http:// and https:// from live_subdomains.txt and save to naabu.txt
-    sed 's|https\?://||g' live_subdomains.txt > naabu.txt
-
-    # Run naabu for fast port scanning
-    if ! sudo ~/go/bin/naabu -i naabu.txt -o port_scan.txt -silent -rate 1000; then
-        echo "Error: naabu port scan failed."
-        rm naabu.txt
-        exit 1
-    fi
-
-    # Clean up temporary file
-    rm naabu.txt
-
-    # Check if port_scan.txt exists and is non-empty, then extract unique ports
-    if [[ -s port_scan.txt ]]; then
-        awk -F':' '{print $2}' port_scan.txt | sort -u > summary_of_port_scanning.txt
-        echo "Port scan complete. Unique ports saved to summary_of_port_scanning.txt."
     else
-        echo "Error: port_scan.txt is empty or missing. No ports extracted."
-        exit 1
+        # Remove http:// and https:// from live_subdomains.txt and save to naabu.txt
+        sed 's|https\?://||g' live_subdomains.txt > naabu.txt
+
+        # Run naabu for fast port scanning
+        if ! sudo ~/go/bin/naabu -i naabu.txt -o port_scan.txt -silent -rate 1000; then
+            echo "Warning: naabu port scan failed. Continuing with remaining steps."
+            rm -f naabu.txt  # Clean up temporary file even on failure
+        else
+            # Clean up temporary file
+            rm -f naabu.txt
+
+            # Check if port_scan.txt exists and is non-empty, then extract unique ports
+            if [[ -s port_scan.txt ]]; then
+                awk -F':' '{print $2}' port_scan.txt | sort -u > summary_of_port_scanning.txt
+                echo "Port scan complete. Unique ports saved to summary_of_port_scanning.txt."
+            else
+                echo "Warning: port_scan.txt is empty or missing. No ports extracted. Continuing with remaining steps."
+            fi
+        fi
     fi
 
     # 8. Run waymore for wayback URLs
