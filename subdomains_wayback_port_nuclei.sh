@@ -137,7 +137,7 @@ for domain in "${DOMAINS[@]}"; do
         echo "Error: live_subdomains.txt is missing or empty. Skipping port scan."
     else
         # Remove http:// and https:// from live_subdomains.txt and save to naabu.txt
-        sed 's|https\?://||g' live_subdomains.txt > naabu.txt
+        sed 's|https\?://||g' live_subdomains.txt | tr -d '\r' | grep -E '^[a-zA-Z0-9.-]+$' > naabu.txt
 
         # Run naabu for fast port scanning
         if ! sudo ~/go/bin/naabu -l naabu.txt -o port_scan.txt -silent; then
