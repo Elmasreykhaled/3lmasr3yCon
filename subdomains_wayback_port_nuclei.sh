@@ -140,7 +140,7 @@ for domain in "${DOMAINS[@]}"; do
         sed 's|https\?://||g' live_subdomains.txt > naabu.txt
 
         # Run naabu for fast port scanning
-        if ! sudo ~/go/bin/naabu -i naabu.txt -o port_scan.txt -silent -rate 1000; then
+        if ! sudo ~/go/bin/naabu -l naabu.txt -o port_scan.txt -silent; then
             echo "Warning: naabu port scan failed. Continuing with remaining steps."
             rm -f naabu.txt  # Clean up temporary file even on failure
         else
