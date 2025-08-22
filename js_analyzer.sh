@@ -71,6 +71,8 @@ echo "[*] Changing to directory: $js/js_files for gf analysis"
 cd "$js/js_files" || { echo "[!] Error: Failed to change to $js/js_files directory"; exit 1; }
 echo "[*] Analyzing JS files for secrets using gf patterns..."
 patterns=(
+    "asymmetric-keys_secrets"
+    "base64"
     "aws-keys_secrets"
     "aws-s3_secrets"
     "facebook-oauth_secrets"
