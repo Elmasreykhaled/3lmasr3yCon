@@ -29,6 +29,7 @@ cp "$WAYMORE_PATH" live_waymore.txt || {
 
 # List of patterns
 patterns=(
+  "base64"
   "cors"
   "debug-pages"
   "debug_logic"
