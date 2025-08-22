@@ -328,8 +328,8 @@ For each domain (e.g., `example.com/`):
 - `nuclei.txt`: Vulnerability scan results
 - `js/js_urls.txt`: Extracted JavaScript URLs
 - `js/js_files/`: Downloaded JavaScript files
-- `js/secrets_from_js/`: Secrets found in JS files (e.g., `firebase.txt`, `github_secrets.txt`)
-- `hit_points/`: Vulnerability and secret analysis from URLs (e.g., `xss.txt`, `ssti.txt`, `aws-keys_secrets.txt`)
+- `js/secrets_from_js/`: Secrets found in JS files (e.g., `aws-keys_secrets.txt`, `github_secrets.txt`)
+- `hit_points/`: Vulnerability and secret analysis from URLs (e.g., `xss.txt`, `ssti.txt`)
 
 ## Performance Tips
 
