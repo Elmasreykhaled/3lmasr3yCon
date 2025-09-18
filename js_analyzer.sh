@@ -6,7 +6,7 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-WAYMORE_FILE="$1"
+WAYMORE_FILE="$PWD/$1"
 
 # Check if live_waymore.txt exists
 echo "[*] Checking for input file: $WAYMORE_FILE"
