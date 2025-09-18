@@ -7,7 +7,7 @@ if [ -z "$1" ]; then
 fi
 
 # Store the input path
-WAYMORE_PATH="$1"
+WAYMORE_PATH="$PWD/$1"
 
 # Check if live_waymore.txt exists
 if [ ! -f "$WAYMORE_PATH" ]; then
