@@ -81,6 +81,7 @@ for domain in "${DOMAINS[@]}"; do
             echo "[!] Error: js_analyzer.sh failed for $LIVE_WAYMORE"
         }
         echo "[+] JS analysis complete for $domain"
+        mv js "$domain/js"
     else
         echo "[!] Warning: $LIVE_WAYMORE not found, skipping js_analyzer.sh"
     fi
@@ -92,11 +93,12 @@ for domain in "${DOMAINS[@]}"; do
             echo "[!] Error: get_hit_points.sh failed for $LIVE_WAYMORE"
         }
         echo "[+] Hit points analysis complete for $domain"
+        mv hit_points "$domain/hit_points"
     else
         echo "[!] Warning: $LIVE_WAYMORE not found, skipping get_hit_points.sh"
     fi
 
-    echo "[+] Finished processing $domain"
+   echo "[+] Finished processing $domain"
 done
 
 echo "[+] 3lmasr3yCon completed. Results are in respective domain directories."
