@@ -102,20 +102,19 @@ for domain in "${DOMAINS[@]}"; do
     # 3. Use httpx to get live subdomains from all_collected_subdomains.txt
     echo "Checking live subdomains from all_collected_subdomains.txt..."
     ~/go/bin/httpx -silent -l subdomains/all_collected_subdomains.txt -silent -o subdomains/live_all_collected_subdomains.txt || echo "Httpx failed, skipping..."
+    ~/go/bin/httpx -silent -l subdomains/live_all_collected_subdomains.txt -mc 200,301,303,403 -silent -o subdomains/200_live_all_collected_subdomains.txt || echo "Httpx failed, skipping..."
 
     # 4. Third-level subdomain enumeration
     echo "Running third-level subdomain enumeration for $domain..."
-    if [ -s subdomains/live_all_collected_subdomains.txt ]; then
-        # Run subfinder, assetfinder, and findomain on each live second-level subdomain
+    if [ -s subdomains/200_live_all_collected_subdomains.txt ]; then
+        > subdomains/third.txt
         while IFS= read -r subdomain; do
-            ~/go/bin/subfinder -d "$subdomain" -o subdomains/temp_subfinder_third.txt || echo "Subfinder (third-level) failed, skipping..."
-            ~/go/bin/assetfinder --subs-only "$subdomain" > subdomains/temp_assetfinder_third.txt || echo "Assetfinder (third-level) failed, skipping..."
-            ~/go/bin/github-subdomains -d "$subdomain"  -t "$GITHUB_TOKEN" -o subdomains/temp_github_subdomains_third.txt || echo "Github-subdomains failed, skipping..."            
-            findomain -t "$subdomain" -u subdomains/temp_findomain_third.txt || echo "Findomain (third-level) failed, skipping..."
-        done < subdomains/live_all_collected_subdomains.txt
-        # Combine and deduplicate third-level results
-        cat subdomains/temp_*.txt 2>/dev/null | sort -u > subdomains/third.txt
-        rm subdomains/temp_*.txt 2>/dev/null
+            [ -z "$subdomain" ] && continue
+            host="${subdomain#*://}"
+            echo "Running puredns for $host..."
+            ~/go/bin/puredns bruteforce "$third_wordlist" "$host" -q >> subdomains/third.txt || echo "puredns failed for $subdomain, skipping..."
+        done < subdomains/200_live_all_collected_subdomains.txt
+        sort -u subdomains/third.txt -o subdomains/third.txt
     else
         echo "No live second-level subdomains found for third-level enumeration"
         touch subdomains/third.txt
