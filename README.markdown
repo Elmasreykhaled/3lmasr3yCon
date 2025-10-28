@@ -246,8 +246,17 @@ Set environment variables for API keys:
   ```bash
   export CHAOS_KEY="your_chaos_key"
   ```
+  ### wordlist
 
-**Important**: The `subdomains_wayback_port_nuclei.sh` script uses `GITHUB_TOKEN` and `CHAOS_KEY` environment variables. Ensure they are set before running to avoid failures.
+Set environment variables for woedlist:
+
+- **Third wordlist**: Obtain a wordlist for subdomain bruteforce:
+
+  ```bash
+  export third_wordlist="your_wordlist"
+  ```
+
+**Important**: The `subdomains_wayback_port_nuclei.sh` script uses `GITHUB_TOKEN` , `CHAOS_KEY` and `third_wordlist`  environment variables. Ensure they are set before running to avoid failures.
 
 ### gf Patterns
 
