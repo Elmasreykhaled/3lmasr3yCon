@@ -159,7 +159,7 @@ This design caters to both beginners (using `3lmasr3yCon.sh` for an all-in-one w
 - **Targeted JS Analysis**: Process a custom list of URLs containing JS files to check for secrets without running a full recon.
 
   ```bash
-  cat custom_js_urls.txt | ./js_analyzer.sh
+  ./js_analyzer.sh custom_js_urls.txt
   ```
 
 **Why Use Alone?**: Focus on client-side vulnerabilities or secrets in JS files, especially when you have a pre-existing list of URLs or want to avoid resource-heavy subdomain enumeration.
